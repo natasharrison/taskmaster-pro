@@ -64,6 +64,7 @@ var auditTask = function(taskEl) {
     $(taskEl).addClass("list-group-item-warning");
   }
 };
+
 // enable draggable/sortable feature on list-group elements 
 $(".card .list-group").sortable({
   // enable dragging across lists 
@@ -71,25 +72,21 @@ $(".card .list-group").sortable({
   scroll: false, 
   tolerance: "pointer",
   helper: "clone",
-  activate: function(event){
+  activate: function(event, ui) {
     $(this).addClass("dropover");
-    $("#bottom-trash").addClass("bottom-trash-drag");
-    console.log("activate", this);
+    $(".bottom-trash").addClass("bottom-trash-drag");
   },
-  deactivate: function(event) {
+  deactivate: function(event, ui) {
     $(this).removeClass("dropover");
-    $("#bottom-trash").removeClass("bottom-trash-drag");
-    console.log("deactivate", this);
+    $(".bottom-trash").removeClass("bottom-trash-drag");
   },
   over: function(event) {
-    $(event.target).removeClass("dropover-active");
-    console.log("over", event.target);
+    $(event.target).addClass("dropover-active");
   },
   out: function(event){
     $(event.target).removeClass("dropover-active");
-    console.log("out", event.target);
   },
-  update: function(event) {
+  update: function() {
     // array to store the task data in
     var tempArr = [];
     // loop over current set of children in sortable list 
@@ -291,12 +288,14 @@ $("#remove-tasks").on("click", function() {
   saveTasks();
 });
 
+// load tasks for the first time
+loadTasks();
+
 setInterval(function(){
   $(".card .list-group-item").each(function(index, el){
     auditTask(el);
   });
 }, (1000*60)*30);
 
-// load tasks for the first time
-loadTasks();
+
 
